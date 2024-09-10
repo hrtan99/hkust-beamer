@@ -100,10 +100,9 @@
 \setbeamercolor{alerted text}{fg=ustred}
 \setbeamercolor{author}{fg=black}
 \setbeamercolor{date}{fg=black}
-
-\setbeamerfont{author}{size=\scriptsize}
-\setbeamerfont{date}{size=\tiny}
-\setbeamerfont{title}{series=\bfseries}
+\setbeamerfont{author}{size=\small}
+\setbeamerfont{date}{size=\small,series=\itshape}
+\setbeamerfont{title}{size=\fontsize{20}{72},series=\bfseries}
 \setbeamerfont{subtitle}{series=\mdseries,size=\footnotesize}
 \setbeamerfont{frametitle}{series=\bfseries}
 \setbeamerfont{framesubtitle}{series=\mdseries}
@@ -162,13 +161,15 @@
     };
   \end{tikzpicture}
 
-  \begin{beamercolorbox}[wd=.7\textwidth,sep=0pt,leftskip=2mm]{title}%
+  \begin{beamercolorbox}[wd=.7\textwidth,sep=0pt,leftskip=1mm]{title}%
     {\usebeamerfont{title}\inserttitle}
   
     {\usebeamerfont{subtitle}\insertsubtitle}
-  
+
+    \vspace{15pt}
     {\usebeamerfont{author}\usebeamercolor[fg]{author}\insertauthor}
-  
+
+    \vspace{5pt}
     {\usebeamerfont{date}\usebeamercolor[fg]{date}\insertdate}
   \end{beamercolorbox}
 }
