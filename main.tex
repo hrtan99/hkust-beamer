@@ -3,6 +3,9 @@
 \usepackage{amsfonts,amsmath,oldgerm,algorithmic,algorithm}
 \usepackage[font=small,labelfont=bf]{caption} % Required for specifying captions to tables and figures
 \usepackage{svg} %allows using svg figures
+\usepackage{fontspec}  % 使用 fontspec 来指定字体
+\usepackage{xeCJK}     % 使用 xeCJK 支持中文
+\setCJKmainfont{PingFang SC} % 设置中文字体，例如宋体
 \newcommand{\hrefcol}[2]{\textcolor{uihteal}{\href{#1}{#2}}}
 \newcommand{\testcolor}[1]{\colorbox{#1}{\textcolor{#1}{test}}~\texttt{#1}}
 
@@ -39,9 +42,11 @@
 % default is no footline, but page numbers are incredibly useful for the audience to ask questions later
 \footlinecolor{ustblue}
 
-\begin{frame}[t]{Contents}
+\begin{frame}[t]{Table of Contents}
     % Throughout your presentation, if you choose to use \section{} and \subsection{} commands, these will automatically be printed on this slide as an overview of your presentation
-    \tableofcontents
+    \begin{multicols}{2}  % 两栏
+        \tableofcontents
+    \end{multicols}
 \end{frame}
 
 
@@ -424,11 +429,11 @@ If you want to use fonts beyond those in the \hrefcol{https://tug.org/FontCatalo
 \begin{frame}[fragile]{Good luck with your presentation!}
 \begin{itemize}
 \item  I would appreciate contributions of all sorts (pull requests, identifying issues, etc).
-\item  If you have any suggestions,
+\item  If you have any suggestions\cite{sample2021},
 \hrefcol{mailto:hr.tan@connect.ust.hk}{send them to me!}
 \end{itemize}
 \end{frame}
 
-
+\reference
 \backmatter
 \end{document}

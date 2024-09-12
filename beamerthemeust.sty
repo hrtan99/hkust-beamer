@@ -32,6 +32,11 @@
 \renewcommand{\familydefault}{\sfdefault}
 
 \RequirePackage{graphicx,ustcolor}
+\RequirePackage{multicol}
+\RequirePackage[backend=biber,style=numeric-comp,sorting=none]{biblatex} % 选择引用样式
+\addbibresource{ref.bib} % 指定你的 .bib 文dd件
+
+\setlength{\parskip}{.5em}
 
 % No navigation symbols
 \setbeamertemplate{navigation symbols}{}
@@ -116,9 +121,9 @@
 \setbeamertemplate{blocks}[rounded]
 
 % Bullets in several levels
-\setbeamertemplate{itemize item}{\textbullet}
-\setbeamertemplate{itemize subitem}{\textemdash}
-\setbeamertemplate{itemize subsubitem}{\ensuremath{\circ}}
+\setbeamertemplate{itemize item}{\textbf\textbullet}
+\setbeamertemplate{itemize subitem}{\ensuremath{\circ}}
+\setbeamertemplate{itemize subsubitem}{\textemdash}
 
 \newenvironment{colorblock}[3][white]{%
 	\begingroup
@@ -224,12 +229,25 @@
 
 % Table of contents
 % style of sections and subsections in ToCs
+% \setbeamertemplate{section in toc}{
+%   \vspace{1em}
+% 	$\blacktriangleright$~\inserttocsection
+% }
+% \setbeamertemplate{subsection in toc}{
+%   \vspace{1em}
+%   \hskip2em{$\bullet$} \inserttocsubsection \par
+% }
+% \setbeamertemplate{section in toc}[sections numbered]
+% \setbeamertemplate{subsection in toc}[subsections numbered]
 \setbeamertemplate{section in toc}{
-	$\blacktriangleright$~\inserttocsection
+
+  \textit{\textbf{\inserttocsectionnumber.~\inserttocsection}}
+  % \vspace{.5em}
 }
 \setbeamertemplate{subsection in toc}{
-  \vspace{1em}
-  \hskip2em{$\bullet$} \inserttocsubsection \par
+  % \vspace{1em}
+  \hskip2em\inserttocsectionnumber.\inserttocsubsectionnumber.~\inserttocsubsection \par
+  \vspace{.5em}
 }
 \setbeamertemplate{frametitle continuation}{}
 
@@ -251,11 +269,13 @@
 \AtBeginSection[]
 {
     \begingroup
-    \begin{frame}{Contents}{}
+    \begin{frame}{Table of Contents}{}
     	% \begin{picture}(0,0)
     	% 	\put(-28.5,-166){\includegraphics[width=\paperwidth]{source/silhouette}}
     	% \end{picture}
+      \begin{multicols}{2}  % 两栏
         \tableofcontents[currentsection]
+      \end{multicols}
     \end{frame}
     \endgroup
 }
@@ -322,6 +342,15 @@
   \endminipage
   \end{frame}
   \endgroup
+}
+
+\renewcommand*{\bibfont}{\scriptsize}
+
+\newcommand{\reference}{
+  \begin{frame}[allowframebreaks]{References}
+    \centering
+    \printbibliography
+  \end{frame}
 }
 
 \newcommand{\backmatter}{
