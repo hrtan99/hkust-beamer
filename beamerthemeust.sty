@@ -78,7 +78,7 @@
       };
     }{}
     % 页码节点：锚在左上，距离顶部 5mm
-    \node[anchor=south west, xshift=3pt, yshift=15mm] at (current page.south west) {%
+    \node[anchor=south west, xshift=3pt, yshift=16.5mm] at (current page.south west) {%
       \rotatebox{90}{\usebeamerfont{footline}\hfill\@footlinepayoff}%
     };
     % 导航符号节点：锚在左下，距离底部 5mm
@@ -164,7 +164,7 @@
 \setbeamerfont{author}{size=\small}
 \setbeamerfont{institute}{size=\small}
 \setbeamerfont{date}{size=\small,series=\itshape}
-\setbeamerfont{title}{size=\fontsize{20}{20},series=\bfseries}
+\setbeamerfont{title}{size=\fontsize{18}{20},series=\bfseries}
 \setbeamerfont{subtitle}{series=\fontsize{12}{18},size=\bfseries}
 \setbeamerfont{frametitle}{series=\bfseries}
 \setbeamerfont{framesubtitle}{series=\mdseries}
@@ -367,19 +367,31 @@
   \end{frame}
 }
 
-\AtBeginSection[]
-{
-    \begingroup
-    \begin{frame}{Table of Contents}{}
-    \leftskip=3em
-    \tableofcontents[
-      currentsection,
-      sectionstyle=show/hide,
-      subsectionstyle=show/show/hide
-    ]
-    \end{frame}
-    \endgroup
+\newbool{showsectiontoc}
+\boolfalse{showsectiontoc}
+\newcommand{\setshowsectiontoc}[1]{%
+  \ifstrequal{#1}{true}{%
+    \booltrue{showsectiontoc}%
+  }{%
+    \boolfalse{showsectiontoc}%
+  }%
 }
+
+\ifbool{showsectiontoc}{
+  \AtBeginSection[]
+  {
+      \begingroup
+      \begin{frame}{Table of Contents}{}
+      \leftskip=3em
+      \tableofcontents[
+        currentsection,
+        sectionstyle=show/hide,
+        subsectionstyle=show/show/hide
+      ]
+      \end{frame}
+      \endgroup
+  }
+}{}  % 若为 false，则什么都不安装
 
 % Put the logo in each slide's top left area
 \setbeamertemplate{headline}{\vspace{0.03\textwidth}\hspace{0.05\textwidth}\pgfuseimage{\@USTlogo}}
