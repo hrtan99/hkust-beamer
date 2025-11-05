@@ -35,7 +35,7 @@
 \RequirePackage{graphicx,ustcolor}
 \RequirePackage{multicol}
 \RequirePackage[backend=biber,style=numeric-comp,sorting=none]{biblatex} % 选择引用样式
-\addbibresource{ref.bib} % 指定你的 .bib 文dd件
+\addbibresource{ref.bib} % 指定你的 .bib 文档
 
 \setlength{\parskip}{.5em}
 
@@ -357,17 +357,26 @@
 %   {}
 % \makeatother 
 
-% begin of sections
+\newlength{\tocleftskip}
+\setlength{\tocleftskip}{3em} % default indentation
+
+\newcommand{\maketoc}[1][]{%
+  \begin{frame}[t]{Table of Contents}
+    \leftskip=\tocleftskip
+    \tableofcontents[#1]
+  \end{frame}
+}
+
 \AtBeginSection[]
 {
     \begingroup
     \begin{frame}{Table of Contents}{}
-    	% \begin{picture}(0,0)
-    	% 	\put(-28.5,-166){\includegraphics[width=\paperwidth]{source/silhouette}}
-    	% \end{picture}
-      \begin{multicols}{2}  % 两栏
-        \tableofcontents[currentsection]
-      \end{multicols}
+    \leftskip=3em
+    \tableofcontents[
+      currentsection,
+      sectionstyle=show/hide,
+      subsectionstyle=show/show/hide
+    ]
     \end{frame}
     \endgroup
 }

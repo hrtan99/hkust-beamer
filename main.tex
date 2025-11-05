@@ -6,6 +6,7 @@
 \usepackage{fontspec}  % 使用 fontspec 来指定字体
 \usepackage{xeCJK}     % 使用 xeCJK 支持中文
 \setCJKmainfont{PingFang SC} % 设置中文字体，例如宋体
+\setCJKsansfont{PingFang SC}
 \newcommand{\hrefcol}[2]{\textcolor{uihteal}{\href{#1}{#2}}}
 \newcommand{\testcolor}[1]{\colorbox{#1}{\textcolor{#1}{test}}~\texttt{#1}}
 
@@ -47,15 +48,16 @@
 % default is no footline, but page numbers are incredibly useful for the audience to ask questions later
 % \footlinecolor{ustblue}
 
-\begin{frame}[t]{Table of Contents}
-    % Throughout your presentation, if you choose to use \section{} and \subsection{} commands, these will automatically be printed on this slide as an overview of your presentation
-    \begin{multicols}{2}  % 两栏
-        \tableofcontents
-    \end{multicols}
-\end{frame}
+\maketoc[hideallsubsections]
 
 
 \section{A}
+\subsection{A.1}
+\subsection{A.2}
+\section{Introduction}
+\subsection{B.1}
+\subsection{B.2}
+\section{Background}
 
 
 \begin{frame}{Beamer for UST presentations}
