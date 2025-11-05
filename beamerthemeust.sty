@@ -207,6 +207,16 @@
   \end{beamercolorbox}
 }
 
+% — 设置会议 Logo 的命令，用户调用来启用／指定 Logo —
+\newbool{showconflogo}
+\boolfalse{showconflogo}  % 默认不显示
+\newcommand{\setconflogo}[1]{%
+  \renewcommand{\@ConfLogoFile}{#1}%
+  \booltrue{showconflogo}%
+}
+% — 默认会议 Logo 文件（可被 \setconflogo 覆盖） —
+\newcommand{\@ConfLogoFile}{}
+
 % 设定梯形上/下边宽度（用 paperwidth 更稳，不受左右 margin 影响）
 \newlength{\TrapTop}\setlength{\TrapTop}{.8\paperwidth}  % 上边 0.7 × 页面宽
 \newlength{\TrapBot}\setlength{\TrapBot}{.2\paperwidth}  % 下边 0.4 × 页面宽
@@ -259,8 +269,14 @@
     \node[anchor=north west, xshift=0.55cm, yshift=-0.5cm] (logo) at (current page.north west) {
       \includegraphics[width=3.8cm]{images/ust_std.pdf}
     };
+    % 可选会议 Logo
+    \ifbool{showconflogo}{%
+      \node[anchor=north west, xshift=5cm, yshift=-0.5cm] at (current page.north west) {
+        \includegraphics[height=1cm]{\@ConfLogoFile}
+      };
+    }{}
     \draw[ustblue, line width=.5pt]
-      ($(logo.south west)+(1mm,-1mm)$) -- ($(logo.south east)+(0,-1mm)$);
+      ($(logo.south west)+(1mm,-1mm)$) -- ($(logo.south east)+(-1mm,-1mm)$);
     \end{tikzpicture}
 }
 
