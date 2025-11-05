@@ -13,10 +13,10 @@
 \usefonttheme[onlymath]{serif}
 % \usefonttheme{serif} % use this if you would like Serif font throughout (and not just for math)
 
-\title{Get started with the HKUST Beamer Theme}
+\title{Get started with the HKUST \\ Beamer Theme}
 
-
-\titlebackground*{images/ust_bg.png}
+% \titlebackground*{images/ust_bg.png}
+\titlebackground*{images/background}
 
 % NOTE 1: The asterisk splits the background image. This option is good
 % for logo-based backgrounds. If you use an image based background
@@ -28,19 +28,23 @@
 \themecolor{lightnologo}
 
 % \subtitle{Using \LaTeX\ to prepare slides}
-\subtitle{}
+\subtitle{\LaTeX\ }
 % This can be adjusted accordingly for longer titles
 \newcommand{\titleboxwidth}{0.45\textwidth}
 
 \author{\href{mailto:hr.tan@connect.ust.hk}{Huiri Tan}}
+\institute{HKUST}
 \date{\today}
+
+\setbgcolor{expowhite} % set background color back to default light color
+
 
 \begin{document}
 \maketitle
 \themecolor{light} % reverts to a logo based theme (if you disabled it for title page)
 
 % default is no footline, but page numbers are incredibly useful for the audience to ask questions later
-\footlinecolor{ustblue}
+% \footlinecolor{ustblue}
 
 \begin{frame}[t]{Table of Contents}
     % Throughout your presentation, if you choose to use \section{} and \subsection{} commands, these will automatically be printed on this slide as an overview of your presentation
@@ -216,8 +220,6 @@ Just another another layout you may want to use.
 % \newcommand*\ANNOTATE[1]{\hskip3em$\rightarrow$ #1}
 \newcommand*\ANNOTATE[1]{\hfill\(\triangleright\) #1}%
 
-\footlinecolor{}
-
 \begin{frame}[fragile]{Pseudocode Example}
 \begin{algorithm}[H]
 \fontsize{8}{1}\selectfont
@@ -249,7 +251,7 @@ Just another another layout you may want to use.
 \end{frame}
 
 
-\footlinecolor{ustblue}
+% \footlinecolor{ustblue}
 
 \begin{chapter}[images/ust_wallpaper.jpg]{ustblue}{Personalization}
 \textit{Themes, fonts and colors}
@@ -271,6 +273,7 @@ Three fundamental features greatly affect the look and feel of your slides. Two 
 \item The background color.
 \begin{itemize}
     \item The default is \verb|light| theme, which has a light background, which we are currently using.
+    \item You can use \verb|\setbgcolor{color}| to change the light background color, e.g. \verb|\setbgcolor{ustyellow!20}|.
 \end{itemize}
 \item The foreground color.
 \begin{itemize}
@@ -303,7 +306,7 @@ Three fundamental features greatly affect the look and feel of your slides. Two 
 
 
 \themecolor{light}
-\footlinecolor{ustblue}
+% \footlinecolor{ustblue}
 
 
 \begin{frame}[fragile]{Fonts}
