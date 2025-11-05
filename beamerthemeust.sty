@@ -61,12 +61,24 @@
 %   \end{beamercolorbox}
 % }
 
-% 设置左侧 sidebar，宽度约 1.2cm
+\newbool{showAuthorSideInfo}
+\booltrue{showAuthorSideInfo} % Default: show author and institute on side
+\newcommand{\disableauthorsideinfo}{\boolfalse{showAuthorSideInfo}}
+
 \setbeamersize{sidebar width left=.0cm}
 \setbeamertemplate{sidebar left}{%
   \begin{tikzpicture}[remember picture,overlay]
+    % — 上部：短作者、短机构（靠顶部） —
+    \ifbool{showAuthorSideInfo}{%
+      \node[anchor=north west, xshift=3pt, yshift=-35mm] at (current page.north west) {%
+        \rotatebox{90}{
+          {\usebeamerfont{author}\usebeamercolor[fg]{author}\insertshortauthor, }%
+          {\usebeamerfont{institute}\usebeamercolor[fg]{institute}\insertshortinstitute}%
+        }
+      };
+    }{}
     % 页码节点：锚在左上，距离顶部 5mm
-    \node[anchor=south west, xshift=3pt, yshift=20mm] at (current page.south west) {%
+    \node[anchor=south west, xshift=3pt, yshift=15mm] at (current page.south west) {%
       \rotatebox{90}{\usebeamerfont{footline}\hfill\@footlinepayoff}%
     };
     % 导航符号节点：锚在左下，距离底部 5mm
@@ -148,13 +160,12 @@
 
 \setbeamercolor{title}{fg=ustblue,bg=white}
 \setbeamercolor{alerted text}{fg=ustred}
-\setbeamercolor{author}{fg=black}
 \setbeamercolor{date}{fg=black}
 \setbeamerfont{author}{size=\small}
 \setbeamerfont{institute}{size=\small}
 \setbeamerfont{date}{size=\small,series=\itshape}
 \setbeamerfont{title}{size=\fontsize{20}{20},series=\bfseries}
-\setbeamerfont{subtitle}{series=\fontsize{11}{16},size=\bfseries}
+\setbeamerfont{subtitle}{series=\fontsize{12}{18},size=\bfseries}
 \setbeamerfont{frametitle}{series=\bfseries}
 \setbeamerfont{framesubtitle}{series=\mdseries}
 \setbeamerfont{footline}{size=\scriptsize}
@@ -228,11 +239,12 @@
           \begin{minipage}[t]{.6\paperwidth} % 内容宽度略小于上边宽，避免贴边
             \vspace{1em}
             {\usebeamerfont{title}\color{ustblue}\inserttitle\par}
-            \vspace{1.5em}
+            \vspace{1em}
             {\usebeamerfont{subtitle}\color{ustblue!80}\insertsubtitle\par}
             \vspace{1.5em}
-            {\usebeamerfont{author}\insertauthor}
-            {\usebeamerfont{institute}, \insertinstitute\par}
+            {\usebeamerfont{author}\insertauthor\par}
+            \vspace{0.4em}
+            {\usebeamerfont{institute}\insertinstitute\par}
             \vspace{0.4em}
             {\usebeamerfont{date}\insertdate\par}
           \end{minipage}%

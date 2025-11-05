@@ -27,13 +27,14 @@
 % To do that, simply comment out this line
 \themecolor{lightnologo}
 
-% \subtitle{Using \LaTeX\ to prepare slides}
-\subtitle{\LaTeX\ }
+\subtitle{Using \LaTeX\ to prepare slides}
+
 % This can be adjusted accordingly for longer titles
 \newcommand{\titleboxwidth}{0.45\textwidth}
 
-\author{\href{mailto:hr.tan@connect.ust.hk}{Huiri Tan}}
-\institute{HKUST}
+\author[H. Tan at al.]{\href{mailto:hr.tan@connect.ust.hk}{Huiri Tan}}
+\institute[HKUST]{The Hong Kong University of Science and Technology}
+
 \date{\today}
 
 \setbgcolor{expowhite} % set background color back to default light color
@@ -257,6 +258,10 @@ Just another another layout you may want to use.
 \textit{Themes, fonts and colors}
 \end{chapter}
 
+\begin{frame}[fragile]{Author Information on Sidebar}
+If you do not want author and institute information to be shown on the left sidebar throughout the presentation,
+you can call the command \verb|\disableauthorsideinfo| in the preamble (i.e. before \verb|\begin{document}|).
+\end{frame}
 
 \begin{frame}[fragile]{If you need more space in slides}
 If you would like more space, you can control the font size by specifying an option in the \verb|\documentclass| command at the beginning of this file.
