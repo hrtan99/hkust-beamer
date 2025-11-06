@@ -245,8 +245,8 @@
 \newcommand{\settitlebg}[1]{%
   \renewcommand{\titlebgstyle}{#1}%
 }
-
-\settitlebg{trapezoid}      % 梯形背景
+\settitlebg{upsidedown}      % 上侧矩形 + 下侧渐隐
+% \settitlebg{trapezoid}      % 梯形背景
 % \settitlebg{solid}      % 纯色梯形
 % \settitlebg{splitfade} % 左实右渐隐
 % \settitlebg{none}      % 不绘制背景
@@ -255,8 +255,33 @@
 \newlength{\TrapTop}\setlength{\TrapTop}{.8\paperwidth}  % 上边 0.7 × 页面宽
 \newlength{\TrapBot}\setlength{\TrapBot}{.2\paperwidth}  % 下边 0.4 × 页面宽
 \newlength{\TrapRight}\setlength{\TrapRight}{.3\paperheight}  % 右边 0.7 × 页面宽
+\newlength{\TrapLeft}\setlength{\TrapLeft}{.2\paperheight}  % 左边 0.7 × 页面宽
+\newlength{\TrapUp}\setlength{\TrapUp}{.85\paperheight}  % 右边 0.7 × 页面宽
+\newlength{\TrapDown}\setlength{\TrapDown}{.15\paperheight}  % 左边 0.7 × 页面宽
 
-\newcommand{\TPTrapezoid}{%
+
+\newcommand{\TPFillUpsidedown}{
+  % 上侧矩形
+  \fill[
+    \@BgColor,
+    draw=\@BgColor,
+    line width=.0pt,
+    opacity=1
+  ]
+  ([yshift=\TrapUp]current page.south west) rectangle
+  (current page.north east);
+  % 下侧
+  \fill[
+    fill=\@BgColor,
+    draw=\@BgColor,
+    line width=.0pt,
+    opacity=1,
+  ]
+  (current page.south west) rectangle
+  ([yshift=\TrapDown]current page.south east);
+}
+
+\newcommand{\TPFillTrapezoid}{%
   \fill[\@BgColor,
     draw=\@BgColor!50!ustblue,
     line width=.0pt,
@@ -269,7 +294,7 @@
 }
 
 % --- 背景：纯色梯形 ---
-\newcommand{\TPBGsolid}{%
+\newcommand{\TPFillBGsolid}{%
   \fill[\@BgColor, draw=\@BgColor!50!ustblue, line width=.0pt, opacity=1]
     (current page.south west) --
     ([xshift=\TrapBot]current page.south west) ..
@@ -291,7 +316,7 @@
 % 渐变慢、距离长：fade right long
 \tikzfading[name=fade right long,
   left color=transparent!0,
-  right color=transparent!50,
+  right color=transparent!100,
   fading angle=0,         % 0° 表示水平方向
   % 控制距离长
   fading transform={xscale=2}
@@ -299,7 +324,7 @@
 
 
 % --- 背景：左实图形 + 右渐隐 ---
-\newcommand{\TPBGsplitfade}{%
+\newcommand{\TPFillBGsplitfade}{%
   % 左侧矩形
   \fill[\@BgColor, draw=\@BgColor, line width=.0pt, opacity=1]
   (current page.south west) rectangle
@@ -319,62 +344,131 @@
 % --- 背景：不画任何背景 ---
 \newcommand{\TPBGnone}{}
 
+
+\newcommand{\TPLeftRightSplit}{
+
+
+}
+
+\newcommand{\TPDrawUpsidedownSplitContentArea}{
+\fill[
+  fill=ustblue,
+  draw=ustblue,
+  line width=.0pt,
+  path fading=fade right long,
+  opacity=.5,
+]
+([yshift=\TrapDown]current page.south west) rectangle
+([yshift=3.5\TrapDown]current page.south east);
+% 2. draw the content area
+\begin{scope}
+  % \clip
+  %   (current page.south west) --
+  %   ([xshift=\TrapBot]current page.south west) ..
+  %   controls ++ (5cm,0cm) and ++ (0cm,-5cm) ..
+  %   ([xshift=\TrapTop]current page.north west) --
+  %   (current page.north west) -- cycle;
+  % 内容区：靠左上放一个竖向排版的 minipage
+  \node[anchor=north west, inner sep=.6cm]
+    at ([yshift=-42mm]current page.north west) {%
+      \begin{minipage}[t]{.6\paperwidth} % 内容宽度略小于上边宽，避免贴边
+        \vspace{1em}
+        {\usebeamerfont{title}\color{\@BgColor}\inserttitle\par}
+        \vspace{1em}
+        {\usebeamerfont{subtitle}\color{\@BgColor!80}\insertsubtitle\par}
+        \vspace{1.5em}
+        {\usebeamerfont{author}\color{\@BgColor}\insertauthor\par}
+        \vspace{1em}
+        {\usebeamerfont{institute}\color{ustblue}\insertinstitute\par}
+        \vspace{0.4em}
+        {\usebeamerfont{date}\color{ustblue}\insertdate\par}
+      \end{minipage}%
+    };
+\end{scope}
+
+\fill[ustblue] (current page.south west) rectangle ++(0.1cm,\paperheight);
+}
+
+\newcommand{\TPDrawLeftRightSplitContentArea}{
+% 2. draw the content area
+\begin{scope}
+  \clip
+    (current page.south west) --
+    ([xshift=\TrapBot]current page.south west) ..
+    controls ++ (5cm,0cm) and ++ (0cm,-5cm) ..
+    ([xshift=\TrapTop]current page.north west) --
+    (current page.north west) -- cycle;
+
+  % 内容区：靠左上放一个竖向排版的 minipage
+  \node[anchor=north west, inner sep=.6cm]
+    at ([yshift=-20mm]current page.north west) {%
+      \begin{minipage}[t]{.6\paperwidth} % 内容宽度略小于上边宽，避免贴边
+        \vspace{1em}
+        {\usebeamerfont{title}\color{ustblue}\inserttitle\par}
+        \vspace{1em}
+        {\usebeamerfont{subtitle}\color{ustblue!80}\insertsubtitle\par}
+        \vspace{1.5em}
+        {\usebeamerfont{author}\insertauthor\par}
+        \vspace{0.4em}
+        {\usebeamerfont{institute}\insertinstitute\par}
+        \vspace{0.4em}
+        {\usebeamerfont{date}\color{ustblue}\insertdate\par}
+      \end{minipage}%
+    };
+\end{scope}
+
+\fill[ustblue] (current page.south west) rectangle ++(0.1cm,\paperheight);
+}
+
+\newcommand{\TPPlaceLogosForLeftRightSplit}{%
+% Add the logo to the top left corner of the title page
+\begin{tikzpicture}[remember picture,overlay]
+\node[anchor=north west, xshift=0.55cm, yshift=-0.5cm] (logo) at (current page.north west) {
+  \includegraphics[width=3.8cm]{images/ust_std.pdf}
+};
+% 可选会议 Logo
+\ifbool{showconflogo}{%
+  \node[anchor=north west, xshift=5cm, yshift=-0.5cm] at (current page.north west) {
+    \includegraphics[height=1cm]{\@ConfLogoFile}
+  };
+}{}
+\draw[ustblue, line width=.5pt]
+  ($(logo.south west)+(1mm,-1mm)$) -- ($(logo.south east)+(-1mm,-1mm)$);
+\end{tikzpicture}
+}
+
+\newcommand{\TPPlaceLogosForUpsidedownSplit}{%
+% Add the logo to the top left corner of the title page
+\begin{tikzpicture}[remember picture,overlay]
+\node[anchor=north west, xshift=0.55cm, yshift=-0.13cm] (logo) at (current page.north west) {
+  \includegraphics[width=3.8cm]{images/ust_std.pdf}
+};
+% 可选会议 Logo
+\ifbool{showconflogo}{%
+  \node[anchor=north west, xshift=5cm, yshift=-0.13cm] at (current page.north west) {
+    \includegraphics[height=1cm]{\@ConfLogoFile}
+  };
+}{}
+\draw[ustblue, line width=.5pt]
+  ($(logo.south west)+(1mm,.5mm)$) -- ($(logo.south east)+(-1mm,.5mm)$);
+\end{tikzpicture}
+}
+
 % Define the title page
 \setbeamertemplate{title page}{%
   % \vskip0pt plus 1filll%
   \vspace*{.5cm}
   \begin{tikzpicture}[remember picture,overlay]
-    \ifdefstring{\titlebgstyle}{trapezoid}{\TPTrapezoid}{}
-    \ifdefstring{\titlebgstyle}{solid}{\TPBGsolid}{}
-    \ifdefstring{\titlebgstyle}{splitfade}{\TPBGsplitfade}{}
+    \ifdefstring{\titlebgstyle}{upsidedown}{\TPFillUpsidedown}{}
+    \ifdefstring{\titlebgstyle}{trapezoid}{\TPFillTrapezoid}{}
+    \ifdefstring{\titlebgstyle}{solid}{\TPFillBGsolid}{}
+    \ifdefstring{\titlebgstyle}{splitfade}{\TPFillBGsplitfade}{}
     \ifdefstring{\titlebgstyle}{none}{\TPBGnone}{}
-    
-    % 2. draw the content area
-    \begin{scope}
-      \clip
-        (current page.south west) --
-        ([xshift=\TrapBot]current page.south west) ..
-        controls ++ (5cm,0cm) and ++ (0cm,-5cm) ..
-        ([xshift=\TrapTop]current page.north west) --
-        (current page.north west) -- cycle;
-
-      % 内容区：靠左上放一个竖向排版的 minipage
-      \node[anchor=north west, inner sep=.6cm]
-        at ([yshift=-20mm]current page.north west) {%
-          \begin{minipage}[t]{.6\paperwidth} % 内容宽度略小于上边宽，避免贴边
-            \vspace{1em}
-            {\usebeamerfont{title}\color{ustblue}\inserttitle\par}
-            \vspace{1em}
-            {\usebeamerfont{subtitle}\color{ustblue!80}\insertsubtitle\par}
-            \vspace{1.5em}
-            {\usebeamerfont{author}\insertauthor\par}
-            \vspace{0.4em}
-            {\usebeamerfont{institute}\insertinstitute\par}
-            \vspace{0.4em}
-            {\usebeamerfont{date}\insertdate\par}
-          \end{minipage}%
-        };
-    \end{scope}
-
-    \fill[ustblue] (current page.south west) rectangle ++(0.1cm,\paperheight);
+    \ifdefstring{\titlebgstyle}{upsidedown}{\TPDrawUpsidedownSplitContentArea}{\TPDrawLeftRightSplitContentArea}
     \end{tikzpicture}
-
-    % Add the logo to the top left corner of the title page
-    \begin{tikzpicture}[remember picture,overlay]
-    \node[anchor=north west, xshift=0.55cm, yshift=-0.5cm] (logo) at (current page.north west) {
-      \includegraphics[width=3.8cm]{images/ust_std.pdf}
-    };
-    % 可选会议 Logo
-    \ifbool{showconflogo}{%
-      \node[anchor=north west, xshift=5cm, yshift=-0.5cm] at (current page.north west) {
-        \includegraphics[height=1cm]{\@ConfLogoFile}
-      };
-    }{}
-    \draw[ustblue, line width=.5pt]
-      ($(logo.south west)+(1mm,-1mm)$) -- ($(logo.south east)+(-1mm,-1mm)$);
-    \end{tikzpicture}
+    \ifdefstring{\titlebgstyle}{upsidedown}{\TPPlaceLogosForUpsidedownSplit}{\TPPlaceLogosForLeftRightSplit}
+   
 }
-
 
 \newcommand{\TikzSplitSlide}[1]{%
   \rule{0.4\paperwidth}{0pt}%
@@ -398,11 +492,11 @@
 	\renewcommand{\@TitleBackground}{#1}%
 }
 
-\renewcommand{\maketitle}{
-\begingroup
+\newcommand{\makebg}{
+\ifdefstring{\titlebgstyle}{upsidedown}{
   \usebackgroundtemplate{
     \begin{tikzpicture}[remember picture,overlay]
-    \node[anchor=south west,inner sep=0, xshift=24mm] at (current page.south west) {%
+    \node[anchor=south west,inner sep=0, xshift=-10mm, yshift=15mm] at (current page.south west) {%
     \includegraphics[
       height=\paperheight,
       keepaspectratio,
@@ -412,6 +506,25 @@
     };
     \end{tikzpicture}
   }
+}{
+  \usebackgroundtemplate{
+    \begin{tikzpicture}[remember picture,overlay]
+    \node[anchor=south west,inner sep=0, xshift=24mm, yshift=0mm] at (current page.south west) {%
+    \includegraphics[
+      height=\paperheight,
+      keepaspectratio,
+      trim=0mm 0mm 0mm 0mm,
+      clip
+      ]{\@TitleBackground}
+    };
+    \end{tikzpicture}
+  }
+}
+}
+
+\renewcommand{\maketitle}{
+\begingroup
+  \makebg
   \begin{frame}[plain]%
   \titlepage%
   \end{frame}%
