@@ -168,8 +168,8 @@
 \setbeamerfont{date}{size=\small,series=\itshape}
 \setbeamerfont{title}{size=\fontsize{18}{20},series=\bfseries}
 \setbeamerfont{subtitle}{series=\fontsize{12}{18},size=\bfseries}
-\setbeamerfont{frametitle}{series=\bfseries}
-\setbeamerfont{framesubtitle}{series=\mdseries}
+\setbeamerfont{frametitle}{size=\LARGE,series=\bfseries}
+\setbeamerfont{framesubtitle}{size=\large,series=\mdseries}
 \setbeamerfont{footline}{size=\tiny}
 \setbeamercolor{block title}{fg=white}
 \setbeamercolor{block title example}{fg=white}
@@ -195,34 +195,38 @@
 	\endgroup
 }
 
-% Define frame title and subtitle layout
-\setbeamertemplate{frametitle}{
-  \ifbool{showheadlogo}{
-    \vspace*{-3.8ex}
-    \begin{beamercolorbox}[leftskip=2em, ht=3.0ex, dp=1.2ex]{frametitle}
-      {\usebeamerfont{frametitle}\strut\insertframetitle}
-      \ifx\insertframesubtitle\empty
-        \\[-2ex]
-        {\strut\empty} % adjust space if no subtitle and have logo
-      \else
-        \\[-1.3ex]
-        {\usebeamerfont{framesubtitle}\strut\insertframesubtitle}
-      \fi
-    \end{beamercolorbox}
-  }
-  {
-    \begin{beamercolorbox}[leftskip=0em, ht=3.0ex, dp=1.2ex]{frametitle}
-      {\usebeamerfont{frametitle}\strut\insertframetitle}
-      \ifx\insertframesubtitle\empty
-        \\[-2ex]
-        {\strut\empty}
-      \else
-        \\[-1.3ex]
-        {\usebeamerfont{framesubtitle}\strut\insertframesubtitle}
-      \fi
-    \end{beamercolorbox}
+\newcommand{\makeframetitle}{
+  % Define frame title and subtitle layout
+  \setbeamertemplate{frametitle}{
+    \ifbool{showheadlogo}{
+      \vspace*{-3.4ex}
+      \begin{beamercolorbox}[leftskip=2em, ht=3.0ex, dp=1.2ex]{frametitle}
+        {\usebeamerfont{frametitle}\strut\insertframetitle}
+        \ifx\insertframesubtitle\empty
+          \\[-2ex]
+          {\strut\empty} % adjust space if no subtitle and have logo
+        \else
+          \\[-1.3ex]
+          {\usebeamerfont{framesubtitle}\strut\insertframesubtitle}
+        \fi
+      \end{beamercolorbox}
+    }
+    {
+      \begin{beamercolorbox}[leftskip=0em, ht=3.0ex, dp=1.2ex]{frametitle}
+        {\usebeamerfont{frametitle}\strut\insertframetitle}
+        \ifx\insertframesubtitle\empty
+          \\[-2ex]
+          {\strut\empty}
+        \else
+          \\[-1.3ex]
+          {\usebeamerfont{framesubtitle}\strut\insertframesubtitle}
+        \fi
+      \end{beamercolorbox}
+    }
   }
 }
+
+\makeframetitle
 
 % — 设置会议 Logo 的命令，用户调用来启用／指定 Logo —
 \newbool{showconflogo}
@@ -550,39 +554,12 @@
   \begingroup
   % \themecolor{dark}
   \setbeamertemplate{background}{%
-  % \setbeamercolor{frametitle}{fg=white}
-  % \setbeamercolor{normal text}{fg=white,bg=#2}
-  \hspace*{0.6\paperwidth}%
-  \includegraphics[height=\paperheight]{#1}%
+    % \setbeamercolor{frametitle}{fg=white}
+    % \setbeamercolor{normal text}{fg=white,bg=#2}
+    \hspace*{0.6\paperwidth}%
+    \includegraphics[height=\paperheight]{#1}%
   }
-  \setbeamertemplate{frametitle}{
-    \ifbool{showheadlogo}{
-      \vspace*{-3.8ex}
-      \begin{beamercolorbox}[leftskip=2em, ht=3.0ex, dp=1.2ex]{frametitle}
-      {\usebeamerfont{frametitle}\strut\insertframetitle}
-      \ifx\insertframesubtitle\empty
-        \\[-2ex]
-        {\strut\empty}% adjust space if no subtitle and have logo
-      \else
-        \\[-1.3ex]
-        {\usebeamerfont{framesubtitle}\strut\insertframesubtitle}
-      \fi
-      \end{beamercolorbox}
-    }
-    {
-      \begin{beamercolorbox}[leftskip=0em, ht=3.0ex, dp=1.2ex]{frametitle}
-      {\usebeamerfont{frametitle}\strut\insertframetitle}
-      \ifx\insertframesubtitle\empty
-        \\[-2ex]
-        {\strut\empty}
-      \else
-        \\[-1.3ex]
-        {\usebeamerfont{framesubtitle}\strut\insertframesubtitle}
-      \fi
-      \end{beamercolorbox}
-    }
-
-  }
+  \makeframetitle
   \begin{frame}{#2}
   \minipage{0.6\textwidth}%
 }{%
