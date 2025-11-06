@@ -72,8 +72,8 @@
     \ifbool{showAuthorSideInfo}{%
       \node[anchor=north west, xshift=3pt, yshift=-35mm] at (current page.north west) {%
         \rotatebox{90}{
-          {\usebeamerfont{author}\usebeamercolor[fg]{author}\insertshortauthor, }%
-          {\usebeamerfont{institute}\usebeamercolor[fg]{institute}\insertshortinstitute}%
+          {\usebeamerfont{short author}\usebeamercolor[fg]{author}\insertshortauthor, }%
+          {\usebeamerfont{short institute}\usebeamercolor[fg]{institute}\insertshortinstitute}%
         }
       };
     }{}
@@ -162,17 +162,20 @@
 \setbeamercolor{alerted text}{fg=ustred}
 \setbeamercolor{date}{fg=black}
 \setbeamerfont{author}{size=\small}
+\setbeamerfont{short author}{size=\tiny}
 \setbeamerfont{institute}{size=\small}
+\setbeamerfont{short institute}{size=\tiny}
 \setbeamerfont{date}{size=\small,series=\itshape}
 \setbeamerfont{title}{size=\fontsize{18}{20},series=\bfseries}
 \setbeamerfont{subtitle}{series=\fontsize{12}{18},size=\bfseries}
 \setbeamerfont{frametitle}{series=\bfseries}
 \setbeamerfont{framesubtitle}{series=\mdseries}
-\setbeamerfont{footline}{size=\scriptsize}
+\setbeamerfont{footline}{size=\tiny}
 \setbeamercolor{block title}{fg=white}
 \setbeamercolor{block title example}{fg=white}
 \setbeamercolor{block title alerted}{fg=white}
 \setbeamerfont{block title}{series=\centering\bfseries}
+\setbeamerfont{page number in head/foot}{size=\tiny} 
 
 % Code to get prettier boxes
 \setbeamertemplate{blocks}[rounded]
@@ -194,17 +197,31 @@
 
 % Define frame title and subtitle layout
 \setbeamertemplate{frametitle}{
-  \vspace*{-3.8ex}
-  \begin{beamercolorbox}[leftskip=2em, ht=3.0ex, dp=1.2ex]{frametitle}
-    {\usebeamerfont{frametitle}\strut\insertframetitle}
-    \ifx\insertframesubtitle\empty
-      \\[-2ex]
-      {\strut\empty}
-    \else
-      \\[-1.3ex]
-      {\usebeamerfont{framesubtitle}\strut\insertframesubtitle}
-    \fi
-  \end{beamercolorbox}
+  \ifbool{showheadlogo}{
+    \vspace*{-3.8ex}
+    \begin{beamercolorbox}[leftskip=2em, ht=3.0ex, dp=1.2ex]{frametitle}
+      {\usebeamerfont{frametitle}\strut\insertframetitle}
+      \ifx\insertframesubtitle\empty
+        \\[-2ex]
+        {\strut\empty} % adjust space if no subtitle and have logo
+      \else
+        \\[-1.3ex]
+        {\usebeamerfont{framesubtitle}\strut\insertframesubtitle}
+      \fi
+    \end{beamercolorbox}
+  }
+  {
+    \begin{beamercolorbox}[leftskip=0em, ht=3.0ex, dp=1.2ex]{frametitle}
+      {\usebeamerfont{frametitle}\strut\insertframetitle}
+      \ifx\insertframesubtitle\empty
+        \\[-2ex]
+        {\strut\empty}
+      \else
+        \\[-1.3ex]
+        {\usebeamerfont{framesubtitle}\strut\insertframesubtitle}
+      \fi
+    \end{beamercolorbox}
+  }
 }
 
 % — 设置会议 Logo 的命令，用户调用来启用／指定 Logo —
@@ -484,7 +501,19 @@
 }{}  % 若为 false，则什么都不安装
 
 % Put the logo in each slide's top left area
-\setbeamertemplate{headline}{\vspace{0.03\textwidth}\hspace{0.05\textwidth}\pgfuseimage{\@USTlogo}}
+\newbool{showheadlogo}
+\boolfalse{showheadlogo} % Default: don't show logo in headline
+\newcommand{\enableheadlogo}{\booltrue{showheadlogo}}
+\newcommand{\disableheadlogo}{\boolfalse{showheadlogo}}
+\setbeamertemplate{headline}{
+\ifbool{showheadlogo}
+{
+  \vspace{0.03\textwidth}\hspace{0.05\textwidth}\pgfuseimage{\@USTlogo}
+}
+{
+  \vspace{6ex}\hspace{0.0\textwidth}
+}
+}
 
 \newenvironment{chapter}[3][]{% Args: image (optional), color, frame title
   \begingroup
@@ -527,17 +556,32 @@
   \includegraphics[height=\paperheight]{#1}%
   }
   \setbeamertemplate{frametitle}{
-    \vspace*{-3.8ex}
-    \begin{beamercolorbox}[leftskip=2em, ht=3.0ex, dp=1.2ex]{frametitle}
+    \ifbool{showheadlogo}{
+      \vspace*{-3.8ex}
+      \begin{beamercolorbox}[leftskip=2em, ht=3.0ex, dp=1.2ex]{frametitle}
+      {\usebeamerfont{frametitle}\strut\insertframetitle}
+      \ifx\insertframesubtitle\empty
+        \\[-2ex]
+        {\strut\empty}% adjust space if no subtitle and have logo
+      \else
+        \\[-1.3ex]
+        {\usebeamerfont{framesubtitle}\strut\insertframesubtitle}
+      \fi
+      \end{beamercolorbox}
+    }
+    {
+      \begin{beamercolorbox}[leftskip=0em, ht=3.0ex, dp=1.2ex]{frametitle}
       {\usebeamerfont{frametitle}\strut\insertframetitle}
       \ifx\insertframesubtitle\empty
         \\[-2ex]
         {\strut\empty}
       \else
-        \\[-0.3ex]
+        \\[-1.3ex]
         {\usebeamerfont{framesubtitle}\strut\insertframesubtitle}
       \fi
-    \end{beamercolorbox}
+      \end{beamercolorbox}
+    }
+
   }
   \begin{frame}{#2}
   \minipage{0.6\textwidth}%
