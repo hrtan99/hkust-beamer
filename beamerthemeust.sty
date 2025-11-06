@@ -42,6 +42,7 @@
 % No navigation symbols
 \setbeamertemplate{navigation symbols}{}
 \setbeamertemplate{page number in head/foot}[totalframenumber]%
+\setbeamertemplate{caption}[numbered]
 
 \newcommand{\@footlinepayoff}{\setbeamercolor{page number in head/foot}{fg=ustblue,bg=}\usebeamertemplate{page number in head/foot}}
 \newcommand{\@navigationpayoff}{
@@ -218,7 +219,7 @@
           \\[-2ex]
           {\strut\empty}
         \else
-          \\[-1.3ex]
+          \\[-1ex]
           {\usebeamerfont{framesubtitle}\strut\insertframesubtitle}
         \fi
       \end{beamercolorbox}
@@ -356,10 +357,10 @@
   draw=ustblue,
   line width=.0pt,
   path fading=fade right long,
-  opacity=.5,
+  opacity=.6,
 ]
-([yshift=\TrapDown]current page.south west) rectangle
-([yshift=3.5\TrapDown]current page.south east);
+([yshift=.5\paperheight-1.25\TrapDown]current page.south west) rectangle
+([yshift=.5\paperheight+1.25\TrapDown]current page.south east);
 % 2. draw the content area
 \begin{scope}
   % \clip
@@ -370,15 +371,19 @@
   %   (current page.north west) -- cycle;
   % 内容区：靠左上放一个竖向排版的 minipage
   \node[anchor=north west, inner sep=.6cm]
-    at ([yshift=-42mm]current page.north west) {%
+    at ([yshift=-26mm]current page.north west) {%
       \begin{minipage}[t]{.6\paperwidth} % 内容宽度略小于上边宽，避免贴边
         \vspace{1em}
         {\usebeamerfont{title}\color{\@BgColor}\inserttitle\par}
-        \vspace{1em}
+        \vspace{0em}
         {\usebeamerfont{subtitle}\color{\@BgColor!80}\insertsubtitle\par}
         \vspace{1.5em}
         {\usebeamerfont{author}\color{\@BgColor}\insertauthor\par}
-        \vspace{1em}
+      \end{minipage}%
+    };
+  \node[anchor=north west, inner sep=.6cm]
+    at ([yshift=+18mm]current page.south west) {%
+      \begin{minipage}[t]{.6\paperwidth} % 内容宽度略小于上边宽，避免贴边
         {\usebeamerfont{institute}\color{ustblue}\insertinstitute\par}
         \vspace{0.4em}
         {\usebeamerfont{date}\color{ustblue}\insertdate\par}
@@ -386,7 +391,7 @@
     };
 \end{scope}
 
-\fill[ustblue] (current page.south west) rectangle ++(0.1cm,\paperheight);
+\fill[ustblue] (current page.south west) rectangle ++(0.14cm,\paperheight);
 }
 
 \newcommand{\TPDrawLeftRightSplitContentArea}{
@@ -417,7 +422,7 @@
     };
 \end{scope}
 
-\fill[ustblue] (current page.south west) rectangle ++(0.1cm,\paperheight);
+\fill[ustblue] (current page.south west) rectangle ++(0.15cm,\paperheight);
 }
 
 \newcommand{\TPPlaceLogosForLeftRightSplit}{%
@@ -449,8 +454,8 @@
     \includegraphics[height=1cm]{\@ConfLogoFile}
   };
 }{}
-\draw[ustblue, line width=.5pt]
-  ($(logo.south west)+(1mm,.5mm)$) -- ($(logo.south east)+(-1mm,.5mm)$);
+% \draw[ustblue, line width=.5pt]
+%   ($(logo.south west)+(1mm,.5mm)$) -- ($(logo.south east)+(-1mm,.5mm)$);
 \end{tikzpicture}
 }
 
