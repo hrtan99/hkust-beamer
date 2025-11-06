@@ -23,7 +23,7 @@
 
 \RequirePackage{etoolbox}
 \RequirePackage{tikz}
-\usetikzlibrary{calc,shadows}
+\usetikzlibrary{calc,fadings}
 
 % Force 16:10 aspect ratio
 \RequirePackage{geometry}
@@ -217,23 +217,97 @@
 % — 默认会议 Logo 文件（可被 \setconflogo 覆盖） —
 \newcommand{\@ConfLogoFile}{}
 
+% --- 控制 titlepage 背景模式 ---
+% modes: solid (default), splitfade, none
+\newcommand{\titlebgstyle}{solid}
+
+\newcommand{\settitlebg}[1]{%
+  \renewcommand{\titlebgstyle}{#1}%
+}
+
+\settitlebg{trapezoid}      % 梯形背景
+% \settitlebg{solid}      % 纯色梯形
+% \settitlebg{splitfade} % 左实右渐隐
+% \settitlebg{none}      % 不绘制背景
+
 % 设定梯形上/下边宽度（用 paperwidth 更稳，不受左右 margin 影响）
 \newlength{\TrapTop}\setlength{\TrapTop}{.8\paperwidth}  % 上边 0.7 × 页面宽
 \newlength{\TrapBot}\setlength{\TrapBot}{.2\paperwidth}  % 下边 0.4 × 页面宽
+\newlength{\TrapRight}\setlength{\TrapRight}{.3\paperheight}  % 右边 0.7 × 页面宽
+
+\newcommand{\TPTrapezoid}{%
+  \fill[\@BgColor,
+    draw=\@BgColor!50!ustblue,
+    line width=.0pt,
+    opacity=1]
+    (current page.south west) --
+    ([xshift=\TrapBot]current page.south west) ..
+    controls ++ (5cm,0cm) and ++ (0cm,-5cm) ..
+    ([xshift=\TrapTop]current page.north west) --
+    (current page.north west) -- cycle;
+}
+
+% --- 背景：纯色梯形 ---
+\newcommand{\TPBGsolid}{%
+  \fill[\@BgColor, draw=\@BgColor!50!ustblue, line width=.0pt, opacity=1]
+    (current page.south west) --
+    ([xshift=\TrapBot]current page.south west) ..
+    controls ++ (10cm,0cm) and ++ (-8cm,1cm) ..
+    (current page.north east) --
+    (current page.north west) -- cycle;
+}
+
+% 渐变快、距离短：fade right short
+\tikzfading[name=fade right short,
+  left color=transparent!0,
+  middle color=transparent!0,         % 中段仍不透明
+  right color=transparent!100,
+  fading angle=0,         % 0° 表示水平方向
+  % 控制距离短（默认缩放）
+  fading transform={xscale=2}
+]
+
+% 渐变慢、距离长：fade right long
+\tikzfading[name=fade right long,
+  left color=transparent!0,
+  right color=transparent!50,
+  fading angle=0,         % 0° 表示水平方向
+  % 控制距离长
+  fading transform={xscale=2}
+]
+
+
+% --- 背景：左实图形 + 右渐隐 ---
+\newcommand{\TPBGsplitfade}{%
+  % 左侧矩形
+  \fill[\@BgColor, draw=\@BgColor, line width=.0pt, opacity=1]
+  (current page.south west) rectangle
+  ([xshift=\TrapBot]current page.north west);
+  % 右侧渐隐
+  \fill[
+    fill=\@BgColor,
+    draw=\@BgColor,
+    line width=.0pt,
+    opacity=1,
+    path fading=fade right short
+  ]
+  ([xshift=\TrapBot]current page.south west) rectangle
+  ([xshift=\TrapTop]current page.north west);
+}
+
+% --- 背景：不画任何背景 ---
+\newcommand{\TPBGnone}{}
 
 % Define the title page
 \setbeamertemplate{title page}{%
   % \vskip0pt plus 1filll%
   \vspace*{.5cm}
   \begin{tikzpicture}[remember picture,overlay]
-    % 1. draw the trapezoid background
-    \fill[\@BgColor,opacity=1]
-      (current page.south west) --
-      ([xshift=\TrapBot]current page.south west) ..
-      controls ++ (5cm,0cm) and ++ (0cm,-5cm) ..
-      ([xshift=\TrapTop]current page.north west) --
-      (current page.north west) -- cycle;
-
+    \ifdefstring{\titlebgstyle}{trapezoid}{\TPTrapezoid}{}
+    \ifdefstring{\titlebgstyle}{solid}{\TPBGsolid}{}
+    \ifdefstring{\titlebgstyle}{splitfade}{\TPBGsplitfade}{}
+    \ifdefstring{\titlebgstyle}{none}{\TPBGnone}{}
+    
     % 2. draw the content area
     \begin{scope}
       \clip
